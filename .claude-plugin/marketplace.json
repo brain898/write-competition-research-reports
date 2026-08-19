@@ -1,0 +1,16 @@
+{
+  "name": "write-competition-research-reports",
+  "owner": { "name": "brain898", "url": "https://github.com/brain898" },
+  "metadata": { "description": "Marketplace hosting the write-competition-research-reports plugin." },
+  "plugins": [
+    {
+      "name": "write-competition-research-reports",
+      "description": "中文竞赛调研报告写作 Skill：把材料范围、实名授权、字数净变化和链接核验结果一并交出，结论强度不超过证据强度。",
+      "version": "1.0.0",
+      "author": { "name": "Wenzhe Ye", "url": "https://github.com/brain898" },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/brain898/write-competition-research-reports"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "竞赛调研报告写作"
+  short_description: "用真实调研证据写出可参赛、可追问、可落地的调研报告"
+  default_prompt: "使用 $write-competition-research-reports，基于真实调研材料完成报告的清点、起草、重构或全文体检，并确保结论不超过证据边界。"

@@ -1,0 +1,8 @@
+# 测试材料不入库：Agent 会顺手翻 skill 目录，
+# 测试用例写着全部红线和期望行为，读到就是开卷考。
+TESTING.md
+test-prompts.json
+tests/
+examples/baseline-*.md
+examples/control-run-*.md
+examples/regression-*.md
