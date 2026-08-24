@@ -7,7 +7,7 @@
 ![Codex](https://img.shields.io/badge/Codex-supported-blue?style=flat-square)
 ![Language](https://img.shields.io/badge/language-简体中文-red?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-[![skills.sh](https://skills.sh/b/brain898/write-competition-research-reports)](https://skills.sh/brain898/write-competition-research-reports)
+[![skills.sh](https://img.shields.io/badge/skills.sh-listed-8A2BE2?style=flat-square)](https://skills.sh/s/brain898/write-competition-research-reports)
 
 一个面向中文竞赛调研报告的 Agent Skill。它管的不只是让 AI 写得更对，是让 AI 把凭什么这么说一并交出来：材料范围、实名授权状态、外部链接核验结果写在正文旁边，字数账和材料台账在交付说明里报给你一眼，不占正文篇幅。
 
@@ -36,7 +36,7 @@
 
 完整对照见 [`examples/before-after.md`](examples/before-after.md)。
 
-**它对自己也一样严。** [`examples/self-audit.md`](examples/self-audit.md) 记录了一次真实自查：用这个 skill 自己的证据规则审查它自己的参考文件，查出一条 404 死链、一条跨段拼接的假直引、一处未更新的访问日期，四项已全部修复并复验。全过程命令可复现。
+**它对自己也一样严。** [`examples/self-audit.md`](examples/self-audit.md) 记录了三轮真实自查，每一轮都是用这个 skill 自己的证据规则审查它自己的文件。第一轮审参考文件，查出一条 404 死链、一条跨段拼接的假直引、两条无法核实但不足以判为失效的链接、一处未随内容更新的访问日期。第二轮审 README，查出首屏挂着自己的死链、一笔回算不出来的字数账、一个没有分母的测试分数。第三轮审第二轮新补的基准报告，查出三处，全部是第二轮自己写进去的。每轮的发现、处理和复现命令都在文件里，未解决的标着未解决。
 
 ## 快速开始
 
@@ -129,6 +129,7 @@ write-competition-research-reports/
 │   └── openai.yaml                   # Codex 展示元数据
 ├── examples/
 │   ├── before-after.md               # 注水段落 → 合规段落，逐条标注改动依据
+│   ├── benchmark.md                  # 对抗性测试的设计、判分口径、结果与限制说明
 │   └── self-audit.md                 # 用本 skill 的规则审查本 skill 自己的参考文件
 └── references/
     ├── core-method.md                # 论证主链、调研反转、案例比较、机制、对策、青年视角
@@ -145,12 +146,13 @@ write-competition-research-reports/
 
 发布前跑过五条对抗性测试，每条单开干净会话、不提示 Agent 使用本 skill、第一次输出即被测对象：
 
-- 同题同日、不装 skill 的对照组：0/5
-- 装了之后：5/5
-- 改动内核后跑了三轮回归。其中「外部链接核验到什么程度就停手」这条规则，前两轮因为测试链接恰好都命中缓存注记而根本没被测到，换成表外链接的第三轮才验实
-- 用本 skill 自己的证据规则审查它自己的参考文件，查出一条 404 死链、一条跨段拼接的假直引、一处未更新的访问日期，全部修复并复验，记录见 [`examples/self-audit.md`](examples/self-audit.md)
+- **不装 skill 的对照组：0/5。** 这五次判分来自两轮：其中三条探针首轮在无 skill 条件下也通过了，说明它们测的是模型通用能力，于是各加严一条红线后重跑，三条全部失败，且只触碰新增的那条红线
+- **装了之后：判分规则 v2 下 5/5，v1 下 4/5。** 差别只在字数那条红线，它当天从「自报值与实测偏差超 3% 即失败」降级为「只判净减方向」。改尺子会抬高历史分数，所以两个版本都留着，引用哪个都得写版本
+- **改动内核后跑了三轮回归。** 其中「外部链接核验到什么程度就停手」这条规则，前两轮因为测试链接恰好都命中缓存注记而根本没被走到，两轮绿灯都是假的，换成注记表外的链接第三轮才验实
 
-对照组六次判分的失败点落在同一模式上：内容大多写对了，但没有一条留下可供第三方核对的痕迹，不说材料范围、不登记授权状态、不报字数变化、不区分「链接 404」与「本机连不上」。这个 skill 管的就是这一层。
+**这个分数能支持什么、不能支持什么，单列在 [`examples/benchmark.md`](examples/benchmark.md)。** 简单说：n=5 是定性探针不是有效性度量，判分方虽与跑测方分离但非盲评，单次采样，模型版本未记录因而未跨模型验证，测试用例不入库因而第三方无法独立复现。按本 skill 自己的结论强度表，它只能支持「在这五条探针上，装与不装的第一次输出有稳定差异」，不能支持「这个 skill 必然有效」。一个要求别人交出分母的 skill，自己的分母也得摆出来。
+
+对照组的失败点落在同一模式上：内容大多写对了，但没有一条留下可供第三方核对的痕迹，不说材料范围、不登记授权状态、不报字数变化、不区分「链接 404」与「本机连不上」。这个 skill 管的就是这一层。
 
 基线不需要满分，需要真实。首轮跑出 3/5 比跑出 5/5 更有用。
 
